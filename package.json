@@ -1,0 +1,19 @@
+{
+  "name": "notesproject",
+  "version": "1.0.0",
+  "description": "Notes app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WizarDDog/notesProject.git"
+  },
+  "author": "Karolis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WizarDDog/notesProject/issues"
+  },
+  "homepage": "https://github.com/WizarDDog/notesProject#readme"
+}
