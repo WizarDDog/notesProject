@@ -24,11 +24,12 @@ class App extends Component {
     }
 
     ifHidden(i) {
-        if (this.state.isHidden)
-            this.showSavedNote(i)
-        this.setState({
-            isHidden: false,
-        })
+        if (this.state.isHidden) {
+            this.showSavedNote(i);
+            this.setState({
+                isHidden: false,
+            })
+        }
         if (!this.state.isHidden) {
             this.setState({
                 savedNote: "",
@@ -68,7 +69,6 @@ class App extends Component {
         document.getElementById('input1').value = ''
 
     }
-
 
 
     render() {
