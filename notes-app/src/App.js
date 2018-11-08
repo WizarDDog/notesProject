@@ -13,19 +13,23 @@ class App extends Component {
         super(props);
         this.state = {
             note: "",
-            savedNote: "",
-            savedNotesName: "",
             notesName: "",
-            writtenNotes: [],
+            writtenNotesAndName: [{
+                name: "",
+                note: ""
+            }],
             writtenNotesName: [],
             isHidden: true,
-            showNote: ''
+            showNote: '',
+            allNotes: [],
+            showEdit: false,
+            newNotesName: "",
         };
     }
 
     ifHidden(i) {
         if (this.state.isHidden) {
-            this.showSavedNote(i);
+            this.findNoteOfName(i);
             this.setState({
                 isHidden: false,
             })
@@ -34,7 +38,8 @@ class App extends Component {
             this.setState({
                 savedNote: "",
                 isHidden: true,
-                showNote: ""
+                showNote: "",
+                showEdit: false
             })
         }
     }
@@ -49,48 +54,80 @@ class App extends Component {
         this.state.notesName = e.target.value;
     }
 
-    showSavedNote(i) {
-        var newNote = this.state.note
-        this.state.writtenNotes.push(newNote)
-        this.setState({
-            savedNote: newNote,
-            showNote: this.state.writtenNotes[i]
-        })
-        document.getElementById('input1').value = ''
-    }
+    showSavedNotesAndName() {
+        this.state.writtenNotesName.push(this.state.notesName)
+        this.state.allNotes.push(this.state.note)
 
-    showSavedNotesName() {
-        var newNotesName = this.state.notesName;
-        this.setState({
-            savedNotesName: newNotesName,
-        })
-        this.state.writtenNotesName.push(newNotesName)
         document.getElementById('input2').value = ''
         document.getElementById('input1').value = ''
-
+        this.setState({})
     }
 
+    findNoteOfName(i) {
+        const result = this.state.allNotes[i]
+        this.setState({
+            showNote: result,
+        })
+    }
+
+    deleteNote() {
+        const index = this.state.allNotes.findIndex(note => note === this.state.showNote)
+        this.state.writtenNotesName.splice(index, 1)
+        this.state.allNotes.splice(index, 1)
+        this.setState({
+            showNote: ""
+        })
+    }
+
+    openEditNote() {
+        const index = this.state.allNotes.findIndex(note => note === this.state.showNote)
+        const oldNotesName = this.state.writtenNotesName[index]
+        this.setState({
+            note: this.state.showNote,
+            notesName: oldNotesName,
+            showEdit: true
+        })
+        this.showEditNote()
+    }
+    showEditNote() {
+        if (this.state.showEdit) {
+            return <div>
+                <input defaultValue={this.state.showNote}/>
+                <input defaultValue={this.state.notesName}/>
+            </div>
+        } if (!this.state.showEdit) {
+            return <div></div>
+        }
+    }
+
+    saveEditNote() {
+        const index = this.state.allNotes.findIndex(note => note === this.state.showNote)
+        this.state.allNotes.splice(index, 1, this.state.newNotesName)
+    }
 
     render() {
+        var showDiv = this.showEditNote();
         return (
             <div className="App ">
                 <div className="Name ">Name</div>
-                <button type="submit" onClick={() => this.showSavedNotesName()} id="Icon1"><FontAwesomeIcon icon="plus"/>
+                <button type="submit" onClick={() => this.showSavedNotesAndName()} id="Icon1"><FontAwesomeIcon
+                    icon="plus"/>
                 </button>
-                <button disabled id="Icon2"><FontAwesomeIcon icon="trash"/></button>
+                <button onClick={() => this.deleteNote()} id="Icon2"><FontAwesomeIcon icon="trash"/></button>
                 <ul className="WrittenNotes">
                     {this.state.writtenNotesName.map((item, i) => {
                         return <div>
                             <button key={i} onClick={() => this.ifHidden(i)}>
                                 {item}
                             </button>
-                            <div>{this.state.showNote}</div>
                         </div>
                     })} </ul>
                 <input className="Note" id="input1" placeholder="Write your note here!"
                        onChange={(e) => this.saveNote(e)} defaultValue={this.state.note}/>
                 <input className="notesName" id="input2" placeholder="Notes name!"
                        onChange={(e) => this.saveNotesName(e)} defaultValue={this.state.notesName}/>
+                <div onClick={() => this.openEditNote()}>{this.state.showNote}</div>
+                {showDiv}
             </div>
         );
     }
