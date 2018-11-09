@@ -24,6 +24,8 @@ class App extends Component {
             allNotes: [],
             showEdit: false,
             newNotesName: "",
+            newNote: "",
+            time: "",
         };
     }
 
@@ -43,7 +45,6 @@ class App extends Component {
             })
         }
     }
-
 
     saveNote(e) {
         this.state.note = e.target.value;
@@ -89,11 +90,13 @@ class App extends Component {
         })
         this.showEditNote()
     }
+
     showEditNote() {
         if (this.state.showEdit) {
             return <div>
-                <input defaultValue={this.state.showNote}/>
-                <input defaultValue={this.state.notesName}/>
+                <input defaultValue={this.state.showNote} onChange={(e) => this.state.newNote = e.target.value}/>
+                <input defaultValue={this.state.notesName} onChange={(e) => this.state.newNotesName = e.target.value}/>
+                <button onClick={() => this.saveEditNote()}>Save</button>
             </div>
         } if (!this.state.showEdit) {
             return <div></div>
@@ -102,18 +105,22 @@ class App extends Component {
 
     saveEditNote() {
         const index = this.state.allNotes.findIndex(note => note === this.state.showNote)
-        this.state.allNotes.splice(index, 1, this.state.newNotesName)
+        this.state.allNotes.splice(index, 1, this.state.newNote)
+        this.state.writtenNotesName.splice(index, 1, this.state.newNotesName)
+        this.setState({showNote: this.state.newNote})
     }
 
     render() {
         var showDiv = this.showEditNote();
         return (
             <div className="App ">
-                <div className="Name ">Name</div>
-                <button type="submit" onClick={() => this.showSavedNotesAndName()} id="Icon1"><FontAwesomeIcon
+                <div className="Name" id="1">Name</div>
+                <div className="Icons">
+                <button type="submit" id="Icon1" onClick={() => this.showSavedNotesAndName()} id="Icon1"><FontAwesomeIcon
                     icon="plus"/>
                 </button>
                 <button onClick={() => this.deleteNote()} id="Icon2"><FontAwesomeIcon icon="trash"/></button>
+                </div>
                 <ul className="WrittenNotes">
                     {this.state.writtenNotesName.map((item, i) => {
                         return <div>
@@ -122,10 +129,18 @@ class App extends Component {
                             </button>
                         </div>
                     })} </ul>
-                <input className="Note" id="input1" placeholder="Write your note here!"
-                       onChange={(e) => this.saveNote(e)} defaultValue={this.state.note}/>
-                <input className="notesName" id="input2" placeholder="Notes name!"
+
+                <div className="nameAndNote">
+                    <div className="form-group">
+                    <input className="notesName" id="input1" placeholder="Notes name!"
                        onChange={(e) => this.saveNotesName(e)} defaultValue={this.state.notesName}/>
+                        <label htmlFor="dynamic-label-input">Notes name!</label>
+                    </div>
+                    <div>
+                <input className="Note" id="input2" placeholder="Write your note here!"
+                    onChange={(e) => this.saveNote(e)} defaultValue={this.state.note}/>
+                    </div>
+                </div>
                 <div onClick={() => this.openEditNote()}>{this.state.showNote}</div>
                 {showDiv}
             </div>
