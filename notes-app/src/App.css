@@ -1,9 +1,34 @@
+.green {
+    border: solid green;
+}
+.blue {
+    border: solid blue;
+}
+.red {
+    border: solid red;
+}
+.App{
+    height: 500px;
+    width: 100%;
+    background-image: url("https://ak4.picdn.net/shutterstock/videos/31206454/thumb/1.jpg")
+}
+.Rating {
+    grid-row: 2;
+    grid-column: 3;
+}
+#input2{
+    width: 100%;
+}
+#input1{
+    width: 93%;
+}
+
 .App {
     display: grid;
-    grid-template-columns: 300px 250px;
+    grid-template-columns: 300px 250px ;
     grid-template-rows: auto auto;
 }
-.Name {
+.WrittenNotes {
     grid-row: 1;
     grid-column: 1;
 }
@@ -11,10 +36,7 @@
     grid-row: 1;
     grid-column: 2;
 }
-.WrittenNotes {
-    grid-row: 2;
-    grid-column: 1;
-}
+
 .nameAndNote {
     grid-row: 2;
     grid-column: 2;
@@ -29,9 +51,6 @@
 #Icon3{
     width: 33%;
 }
-#input1{
-    width: 100%;
-}
 #input2{
     grid-row: 3;
     grid-column: 2;
@@ -40,16 +59,26 @@
     position: relative;
     padding-top: 1.5rem;
 }
+button{
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    border-radius: 4px;
+}
+button:hover {
+    background-color: black ;
+    color: white;
+}
 
-label {
+#label {
     position: absolute;
     top: 0;
     opacity: 1;
     transform: translateY(0);
     transition: all 0.2s ease-out;
+    margin-left: 5px;
 }
 
-#input1:placeholder-shown + label {
+#input1:placeholder-shown + #label {
     opacity: 0;
     transform: translateY(1rem);
 }

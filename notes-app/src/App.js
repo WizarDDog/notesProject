@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import './App.css';
-import {Editor, EditorState} from 'draft-js';
-
 
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {faPlus, faStickyNote, faTrash} from '@fortawesome/free-solid-svg-icons'
@@ -16,24 +14,22 @@ class App extends Component {
         this.state = {
             note: "",
             notesName: "",
-            writtenNotesAndName: [{
-                name: "",
-                note: ""
-            }],
-            writtenNotesName: [],
             isHidden: true,
             showNote: '',
-            allNotes: [],
             showEdit: false,
             newNotesName: "",
             newNote: "",
-            time: [],
             isEnable: false,
+            showMenu: false,
+            colorPick: "",
 
             buttonNewNote: false,
         };
+        this.color = [];
+        this.writtenNotesName = [];
+        this.allNotes = [];
+        this.time = []
     }
-
 
     componentDidMount() {
         window.addEventListener('keydown', (event) => {
@@ -74,7 +70,7 @@ class App extends Component {
     getTime() {
         var date = new Date().toLocaleString('en-US', {hour12: false}).split(" ");
 
-        var time = date[1];
+        var time1 = date[1];
         var mdy = date[0];
 
         mdy = mdy.split('/');
@@ -82,13 +78,15 @@ class App extends Component {
         var day = parseInt(mdy[1]);
         var year = parseInt(mdy[2]);
 
-        return year + '-' + month + '-' + day + ' ' + time;
+        return year + '-' + month + '-' + day + ' ' + time1;
     }
 
     showSavedNotesAndName() {
-        this.state.writtenNotesName.push(this.state.notesName);
-        this.state.allNotes.push(this.state.note);
-        this.state.time.push(this.getTime());
+        this.writtenNotesName.push(this.state.notesName);
+        this.allNotes.push(this.state.note);
+        this.time.push(this.getTime());
+        this.color.push(this.state.colorPick)
+
 
 
         document.getElementById('input2').value = '';
@@ -97,12 +95,14 @@ class App extends Component {
             note: "",
             notesName: "",
             buttonNewNote: false,
-            isEnable: false
+            isEnable: false,
+            color: "",
+            colorPick: ""
         })
     }
 
     findNoteOfName(i) {
-        const result = this.state.allNotes[i];
+        const result = this.allNotes[i];
         this.setState({
             showNote: result,
         })
@@ -110,9 +110,10 @@ class App extends Component {
 
     deleteNote() {
         if (!this.state.isHidden) {
-            const index = this.state.allNotes.findIndex(note => note === this.state.showNote);
-            this.state.writtenNotesName.splice(index, 1);
-            this.state.allNotes.splice(index, 1);
+            const index = this.allNotes.findIndex(note => note === this.state.showNote);
+            this.writtenNotesName.splice(index, 1);
+            this.allNotes.splice(index, 1);
+            this.color.splice(index, 1);
             this.setState({
                 showNote: ""
             })
@@ -120,14 +121,17 @@ class App extends Component {
     }
 
     openEditNote() {
-        const index = this.state.allNotes.findIndex(note => note === this.state.showNote)
-        const oldNotesName = this.state.writtenNotesName[index];
-        this.setState({
-            note: this.state.showNote,
-            notesName: oldNotesName,
-            showEdit: true
-        });
-        this.showEditNote()
+        if (this.state.showNote === "") {
+        } else {
+            const index = this.allNotes.findIndex(note => note === this.state.showNote)
+            const oldNotesName = this.writtenNotesName[index];
+            this.setState({
+                note: this.state.showNote,
+                notesName: oldNotesName,
+                showEdit: true
+            });
+            this.showEditNote()
+        }
     }
 
     showEditNote() {
@@ -147,15 +151,15 @@ class App extends Component {
 
     checkIfChangedName() {
         if (this.state.newNotesName !== "") {
-            const index = this.state.allNotes.findIndex(note => note === this.state.showNote)
-            this.state.writtenNotesName.splice(index, 1, this.state.newNotesName)
+            const index = this.allNotes.findIndex(note => note === this.state.showNote)
+            this.writtenNotesName.splice(index, 1, this.state.newNotesName)
         }
     }
 
     checkIfChangedNote() {
         if (this.state.newNote !== "") {
-            const index = this.state.allNotes.findIndex(note => note === this.state.showNote);
-            this.state.allNotes.splice(index, 1, this.state.newNote);
+            const index = this.allNotes.findIndex(note => note === this.state.showNote);
+            this.allNotes.splice(index, 1, this.state.newNote);
             this.setState({showNote: this.state.newNote, showEdit: false})
         } else {
             this.setState({showEdit: false})
@@ -175,14 +179,56 @@ class App extends Component {
         }
     }
 
+    makeGreen(){
+        this.setState({
+            showMenu: false,
+            colorPick: "green"
+        })
+    }
+
+    makeBlue(){
+        this.setState({
+            showMenu: false,
+            colorPick: "blue"
+        })
+    }
+    makeRed(){
+        this.setState({
+            showMenu: false,
+            colorPick: "red"
+        })
+    }
+
+    showColorPick(){
+        if (this.state.showMenu){
+           return <div>
+                <button className="green" onClick={()=> this.makeGreen()}>Green</button>
+                <button className="blue" onClick={()=> this.makeBlue()}>Blue</button>
+                <button className="red" onClick={()=> this.makeRed()}>Red</button>
+            </div>
+        }
+    }
+
+    toggleColorPick(){
+        this.setState({
+            showMenu: !this.state.showMenu
+        })
+    }
+
     newNote() {
         if (this.state.buttonNewNote) {
             return <div>
                 <div className="form-group">
 
-                    <input className="notesName" id="input1" placeholder="Notes name!"
+                    <input className="notesName"  id="input1" placeholder="Notes name!"
                            onChange={(e) => this.saveNotesName(e)} defaultValue={this.state.notesName}/>
-                    <label htmlFor="dynamic-label-input">Notes name!</label>
+                    <div id="label" >  Notes name!</div>
+
+                        <button className={this.state.colorPick}  onClick={()=>this.toggleColorPick()}>
+                            Rating
+                        </button>
+                        {this.showColorPick()}
+
                 </div>
                 <div>
             <textarea rows="4" cols="50" className="Note" id="input2" placeholder="Write your note here!"
@@ -196,27 +242,26 @@ class App extends Component {
         var showDiv = this.showEditNote();
         return (
             <div className="App ">
-                <div className="Name" id="1">Name</div>
                 <div className="Icons">
-                    <button className="tooltip2" id="Icon3" onClick={() => (this.setState({buttonNewNote: true}),this.newNote())}><FontAwesomeIcon
+                    <button className="tooltip2" id="Icon3" onClick={() => (this.setState({buttonNewNote: true})/this.newNote())}><FontAwesomeIcon
                         icon="sticky-note"/><span className="tooltiptext2">New Note</span>
                     </button>
                     <button type="submit" className="tooltip1" id="Icon1" disabled={!this.state.isEnable}
-                            onClick={() => this.showSavedNotesAndName()} id="Icon1"><FontAwesomeIcon
+                            onClick={() => this.showSavedNotesAndName()} ><FontAwesomeIcon
                         icon="plus"/><span className="tooltiptext1">Save Note</span>
                     </button>
-                    <button className="tooltip" onClick={() => this.deleteNote()} id="Icon2"><FontAwesomeIcon
+                    <button className="tooltip btn btn-warning" onClick={() => this.deleteNote()} id="Icon2"><FontAwesomeIcon
                         icon="trash"/>
                         <span className="tooltiptext">Delete Note</span>
                     </button>
                 </div>
                 <ul className="WrittenNotes">
-                    {this.state.writtenNotesName.map((item, i) => {
-                        return <div key={i + 1}>
+                    {this.writtenNotesName.map((item, i) => {
+                        return <div className={this.color[i]} key={i + 1}>
                             <button key={i} onClick={() => this.ifHidden(i)}>
                                 {item}
                             </button>
-                            <div key={i + 2}>{this.state.time[i]}</div>
+                            <div key={i + 2}>{this.time[i]}</div>
                         </div>
                     })} </ul>
 
