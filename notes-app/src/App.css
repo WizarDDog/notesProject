@@ -1,3 +1,60 @@
+/*.form1{
+    display: inline-block;
+    float: right;
+    margin: 5px;
+}*/
+/*
+input#check {
+    position: absolute;
+    opacity: 0;
+}
+input#check:checked + label svg path {
+    stroke-dashoffset: 0;
+}
+input#check:focus + label {
+    transform: scale(1.03);
+}
+
+#check + label {
+    display: inline-block;
+    border: 2px solid #333;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+#check + label:active {
+    transform: scale(1.05);
+    border-radius: 10px;
+}
+#check + label svg {
+    pointer-events: none;
+}
+#check + label svg path {
+    fill: none;
+    stroke: #333;
+    stroke-width: 4px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 101;
+    transition: all 350ms cubic-bezier(1, 0, 0.37, 0.91);
+}
+*/
+#check {
+    display: inline-block;
+    float: right;
+    margin-right: 10px;
+    border: 2px solid #333;
+
+}
+
+
+.missing{
+    border: solid red;
+}
+
 * {
     outline:none;
     border:none;
@@ -75,6 +132,11 @@ body {
     background-color: whitesmoke;
     /*background-image:url(https://static.tumblr.com/maopbtg/ZHLmgtok7/button.png);*/
     background-repeat:repeat-x;
+    outline: none;
+    margin-right: 15px;
+}
+#button::-moz-focus-inner {
+    border: 0;
 }
 /*#button:active {
     zoom: 1;
@@ -132,6 +194,7 @@ body {
     margin-top: 10px;
     margin-right: 5px;
     border-radius: 10px;
+    outline: none;
 }
 .greenButton:hover {
     background-color: #4CAF50; /* Green */
@@ -148,6 +211,7 @@ body {
     margin-left: 5px;
     margin-right: 5px;
     border-radius: 10px;
+    outline: none;
 }
 .blueButton:hover {
     background-color: blue;
@@ -164,6 +228,7 @@ body {
     margin-left: 5px;
     margin-right: 5px;
     border-radius: 10px;
+    outline: none;
 }
 .redButton:hover {
     background-color: red; /* Green */
@@ -224,6 +289,7 @@ body {
     transition-duration: 0.4s;
     font-size: 25px;
     font-family:Arial, Helvetica, sans-serif;
+    outline: none;
 
 }
 #Icon2{
@@ -234,6 +300,7 @@ body {
     transition-duration: 0.4s;
     font-size: 25px;
     font-family:Arial, Helvetica, sans-serif;
+    outline: none;
 }
 #Icon3{
     width: 30%;
@@ -243,6 +310,16 @@ body {
     transition-duration: 0.4s;
     font-size: 25px;
     font-family:Arial, Helvetica, sans-serif;
+    outline: none;
+}
+#Icon3::-moz-focus-inner {
+    border: 0;
+}
+#Icon2::-moz-focus-inner {
+    border: 0;
+}
+#Icon1::-moz-focus-inner {
+    border: 0;
 }
 /*#input2{
     grid-row: 3;

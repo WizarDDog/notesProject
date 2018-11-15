@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import './App.css';
 
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faPlus, faStickyNote, faTrash} from '@fortawesome/free-solid-svg-icons'
+import {faPlus, faStickyNote, faTrash , faSave} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
-library.add(faPlus, faTrash, faStickyNote);
+library.add(faPlus, faTrash, faStickyNote, faSave);
 
 class App extends Component {
     constructor(props) {
@@ -23,6 +23,8 @@ class App extends Component {
             showMenu: false,
             colorPick: "",
             showNoteD: false,
+            missingName: "",
+            missingNote: '',
 
             buttonNewNote: false,
         };
@@ -57,6 +59,7 @@ class App extends Component {
                 showNote: "",
                 showEdit: false,
                 isBold: false,
+                showNoteD: false
 
             })
         }
@@ -87,23 +90,39 @@ class App extends Component {
     }
 
     showSavedNotesAndName() {
-        this.writtenNotesName.push(this.state.notesName);
-        this.allNotes.push(this.state.note);
-        this.time.push(this.getTime());
-        this.color.push(this.state.colorPick)
+        if (this.state.notesName === "") {
+            this.setState({
+                missingName: "missing"
+            })
+        }
+        if (this.state.note === "") {
+            this.setState({
+                missingNote: "missing"
+            })
+        }
+        if (this.state.note === "" && this.state.notesName === "") {
+            this.setState({
+                missingNote: "missing",
+                missingName: "missing"
+            })
+        } if (this.state.note !== "" && this.state.notesName !== "") {
+            this.writtenNotesName.push(this.state.notesName);
+            this.allNotes.push(this.state.note);
+            this.time.push(this.getTime());
+            this.color.push(this.state.colorPick)
 
 
-
-        document.getElementById('text').value = '';
-        document.getElementById('title').value = '';
-        this.setState({
-            note: "",
-            notesName: "",
-            buttonNewNote: false,
-            isEnable: false,
-            color: "",
-            colorPick: ""
-        })
+            document.getElementById('text').value = '';
+            document.getElementById('title').value = '';
+            this.setState({
+                note: "",
+                notesName: "",
+                buttonNewNote: false,
+                isEnable: false,
+                color: "",
+                colorPick: ""
+            })
+        }
     }
 
     findNoteOfName(i) {
@@ -122,6 +141,10 @@ class App extends Component {
             this.setState({
                 showNote: "",
                 isHidden: true,
+                showEdit: false,
+                showNoteD: false,
+                notesName: "",
+                note: ""
             })
         }
     }
@@ -239,11 +262,16 @@ class App extends Component {
 
                 <form id="paper" method="get" action="">
 
-                    <div id="margin">Notes Name: <input id="title" type="text" name="title"
+                    <div id="margin">Notes Name: <input id="title" type="text" name="title" className={this.state.missingName} onClick={()=>this.setState({missingName: ""})}
                                                         onChange={(e) => this.saveNotesName(e)} defaultValue={this.state.notesName}/></div>
-                    <textarea onChange={(e) => this.saveNote(e)} defaultValue={this.state.note} placeholder="Write your note here!" id="text" name="text" rows="4"
+                    <textarea onChange={(e) => this.saveNote(e)} defaultValue={this.state.note} placeholder="Write your note here!"
+                              id="text" name="text" rows="4" className={this.state.missingNote} onClick={()=>this.setState({missingNote: ""})}
                               >{}</textarea>
                 </form>
+                <button type="submit" className="tooltip1" id="button"
+                        onClick={() => this.showSavedNotesAndName()} ><FontAwesomeIcon
+                    icon="save"/><span className="tooltiptext1">Save Note</span>
+                </button>
                 <button id="button"  className={this.state.colorPick}  onClick={()=>this.toggleColorPick()}>
                     Color
                 </button>
@@ -270,15 +298,11 @@ class App extends Component {
         return (
             <div className="App ">
                 <div className="Icons">
-                    <button className="tooltip2" id="Icon3" onClick={() => (this.setState({buttonNewNote: true,showEdit: false})/this.newNote())}><FontAwesomeIcon
+                    <button className="tooltip2" id="Icon3" onClick={() => this.setState({buttonNewNote: !this.state.buttonNewNote,showEdit: false, notesName: "", note:""})/this.newNote()}><FontAwesomeIcon
                         icon="sticky-note"/><span className="tooltiptext2">New Note</span>
                     </button>
-                    <button type="submit" className="tooltip1" id="Icon1" disabled={!this.state.isEnable}
-                            onClick={() => this.showSavedNotesAndName()} ><FontAwesomeIcon
-                        icon="plus"/><span className="tooltiptext1">Save Note</span>
-                    </button>
                     <button className="tooltip btn btn-warning" disabled={this.state.isHidden}
-                            onClick={() => this.setState({showEdit: false, showNoteD: false, notesName: "", note: "" })/this.deleteNote()} id="Icon2"><FontAwesomeIcon
+                            onClick={() => this.deleteNote()} id="Icon2"><FontAwesomeIcon
                         icon="trash"/>
                         <span className="tooltiptext">Delete Note</span>
                     </button>
@@ -289,6 +313,16 @@ class App extends Component {
                             <div id="justNotes" key={i} onClick={() => this.ifHidden(i)}>
                                 {item}
                             </div>
+                            <div className="form1" >
+                                <input type="checkbox" id="check" onChange={()=>console.log("checked")}/>
+                            </div>
+                                {/*<input type="checkbox" id="check"/>
+                                <label htmlFor="check" >
+                                    <svg viewBox="0,0,50,50">
+                                        <path d="M5 30 L 20 45 L 45 5">{}</path>
+                                    </svg>
+                                </label>*/}
+
                             <div id="justTime" key={i + 2}>{this.time[i]}</div>
                         </div>
                     })} </ul>
