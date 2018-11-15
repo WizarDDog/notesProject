@@ -268,16 +268,19 @@ body {
     grid-template-rows: auto auto;
 }
 .WrittenNotes {
-    grid-row: 1;
     grid-column: 1;
 }
 .Icons {
+    margin-top: 5px;
+    margin-left: 15px;
     grid-row: 1;
     grid-column: 2;
 }
 
 .nameAndNote {
-    grid-row: 2;
+    margin-left: 15px;
+    margin-top: 25px;
+    grid-row: 1;
     grid-column: 2;
     width: 100%;
 }
